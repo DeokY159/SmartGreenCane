@@ -3,6 +3,7 @@ from flask import Flask, request, jsonify
 app = Flask(__name__)
 impact_received_value = None
 power_received_value = None
+coordinates_log = []
 
 # 임팩트 데이터를 받는 엔드포인트
 @app.route('/post_impact', methods=['POST'])
@@ -43,6 +44,25 @@ def get_power_value():
         return jsonify({'received_power_value': power_received_value}), 200
     else:
         return jsonify({'received_power_value': 'No value received yet'}), 200
+    
+
+# 좌표 데이터를 받는 POST 엔드포인트
+@app.route('/post_coordinates', methods=['POST'])
+def receive_coordinates():
+    data = request.get_json()
+    if 'latitude' in data and 'longitude' in data:
+        latitude = data['latitude']
+        longitude = data['longitude']
+        coordinates_log.append({'latitude': latitude, 'longitude': longitude})
+        print(f"Received coordinate: Latitude: {latitude}, Longitude: {longitude}")
+        return jsonify({'status': 'Coordinate received'}), 200
+    else:
+        return jsonify({'error': 'Invalid data format'}), 400
+
+# 좌표 데이터를 조회하는 GET 엔드포인트
+@app.route('/get_coordinates', methods=['GET'])
+def get_coordinates():
+    return jsonify(coordinates_log), 200
 
 if __name__ == '__main__':
     app.run(port=5000)
