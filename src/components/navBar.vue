@@ -21,15 +21,16 @@
 }
 
 .component-navbar .title {
+    display: flex;
+    align-items: center;
     color: #fff; /* White text color */
     font-size: 25px; /* Larger font size */
     font-weight: bold; /* Bold font weight */
 }
 
 .component-navbar .title p {
-  margin-left: 10px; /* Remove the default top and bottom margins */
-  padding-bottom: 10px;
-  display: inline; /* Make the title appear inline */
+  margin : 0;
+  margin-left: 15px;
 }
 
 .component-navbar ul {

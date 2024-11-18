@@ -5,8 +5,6 @@
   </header>
   <div id="app">
     <div id="main_title">
-      <h1>스마트 그린케인 어플리케이션에 오신 것을 환영합니다!</h1>
-      <p>이곳에서 시각장애인의 위치 및 상태를 확인할 수 있습니다.</p>
     </div>
     <div id="map"></div>
   </div>
@@ -42,8 +40,16 @@ export default {
       attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
     }).addTo(this.map);
 
+     // 커스텀 아이콘 생성
+    const customIcon = L.icon({
+      iconUrl: require('@/assets/custom-marker.png'), // 이미지 경로 (assets 폴더에 저장된 파일)
+      iconSize: [32, 32], // 아이콘 크기
+      iconAnchor: [16, 32], // 아이콘 앵커 위치
+      popupAnchor: [0, -32], // 팝업 위치
+  });
+
     // 초기 마커 생성
-    const marker = L.marker(this.userLocation)
+    const marker = L.marker(this.userLocation, { icon: customIcon })
       .addTo(this.map)
       .bindPopup('<b>사용자 위치</b><br>현재 위치입니다.')
       .openPopup();
