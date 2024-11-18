@@ -3,13 +3,11 @@
       <!-- Navbar -->
       <nav class="component-navbar">
         <div class="col-8 title">
-            <img src ="../assets/greencane.png" alt = "Logo" style="width: 50px; margin-left: 50px;">
+            <img src ="../assets/greencane.png" alt = "Logo" style="width: 50px; margin-left: 20px;">
             <p>Green cane management application</p>
         </div>
         <ul>
-          <!--<li><a href="https://github.com/seslabSJU/onem2m_design_tool" target="_blank">GitHub</a></li>
-          <li><a href="https://onem2m.org" target="_blank">about oneM2M</a></li>-->
-          <!-- <li><a href="#">Contact</a></li> -->
+          <li><a href="https://github.com/DeokY159/2024_OpenSource_GreenCane.git" target="_blank">GitHub</a></li>
         </ul>
       </nav>
       <!-- The rest of your component's content -->
@@ -23,15 +21,14 @@
 }
 
 .component-navbar .title {
-  color: #fff; /* White text color */
-  font-size: 25px; /* Larger font size */
-  font-weight: bold; /* Bold font weight */
-    display: inline; /* Make the title appear inline */
+    color: #fff; /* White text color */
+    font-size: 25px; /* Larger font size */
+    font-weight: bold; /* Bold font weight */
 }
 
 .component-navbar .title p {
   margin-left: 10px; /* Remove the default top and bottom margins */
-  padding-top: 10px;
+  padding-bottom: 10px;
   display: inline; /* Make the title appear inline */
 }
 
