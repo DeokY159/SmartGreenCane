@@ -27,8 +27,8 @@
 
 <script>
 export default {
-  name: 'Popup', // 컴포넌트 이름
-};
+  name: 'Popup' // 컴포넌트 이름
+}
 </script>
 
 <style scoped>

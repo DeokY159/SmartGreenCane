@@ -1,3 +1,4 @@
+/* eslint-disable */
 <template>
   <div>
     <header>
@@ -44,53 +45,53 @@
 </template>
 
 <script>
-import L from 'leaflet';
-import 'leaflet/dist/leaflet.css';
-import navBar from './components/navBar.vue';
-import Popup from './components/Popup.vue';
+import L from 'leaflet'
+import 'leaflet/dist/leaflet.css'
+import navBar from './components/navBar.vue'
+import Popup from './components/Popup.vue'
 
 export default {
   name: 'App',
   components: {
     navBar,
-    Popup,
+    Popup
   },
-  data() {
+  data () {
     return {
       userLocation: [37.5507583, 127.0741682], // 초기 사용자 좌표
       map: null,
-      isPopupVisible: false, // Popup visibility 상태
-    };
+      isPopupVisible: false // Popup visibility 상태
+    }
   },
   methods: {
-    updateLocation(lat, lng) {
-      this.userLocation = [lat, lng];
-      this.map.setView(this.userLocation, 16); // 지도 중심 이동
+    updateLocation (lat, lng) {
+      this.userLocation = [lat, lng]
+      this.map.setView(this.userLocation, 16) // 지도 중심 이동
     },
-    showPopup() {
-      this.isPopupVisible = true; // Popup을 표시
-    },
+    showPopup () {
+      this.isPopupVisible = true // Popup을 표시
+    }
   },
-  mounted() {
+  mounted () {
     // 지도 생성
-    this.map = L.map('map').setView(this.userLocation, 16);
+    this.map = L.map('map').setView(this.userLocation, 16)
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-    }).addTo(this.map);
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    }).addTo(this.map)
 
     // 커스텀 아이콘 생성
     const customIcon = L.icon({
       iconUrl: require('@/assets/custom-marker.png'), // 이미지 경로 (assets 폴더에 저장된 파일)
       iconSize: [32, 32], // 아이콘 크기
       iconAnchor: [16, 32], // 아이콘 앵커 위치
-      popupAnchor: [0, -32], // 팝업 위치
-    });
+      popupAnchor: [0, -32] // 팝업 위치
+    })
 
     // 초기 마커 생성
-    const marker = L.marker(this.userLocation, { icon: customIcon })
+    this.marker = L.marker(this.userLocation, { icon: customIcon })
       .addTo(this.map)
       .bindPopup('<b>사용자 위치</b><br>현재 위치입니다.')
-      .openPopup();
+      .openPopup()
 
     // GeoJSON 데이터 추가
     const geojsonData = {
@@ -100,14 +101,14 @@ export default {
           type: 'Feature',
           geometry: {
             type: 'Point',
-            coordinates: [126.978, 37.5665], // 서울 좌표
+            coordinates: [126.978, 37.5665] // 서울 좌표
           },
           properties: {
-            name: 'Seoul City',
-          },
-        },
-      ],
-    };
+            name: 'Seoul City'
+          }
+        }
+      ]
+    }
 
     L.geoJSON(geojsonData, {
       pointToLayer: (feature, latlng) => {
@@ -117,14 +118,13 @@ export default {
           color: 'blue',
           weight: 1,
           opacity: 1,
-          fillOpacity: 0.8,
-        });
-      },
-    }).addTo(this.map);
-  },
-};
+          fillOpacity: 0.8
+        })
+      }
+    }).addTo(this.map)
+  }
+}
 </script>
-
 
 <style>
 body {
@@ -147,8 +147,7 @@ body {
   display: flex;
   flex: 1; /* 남은 공간을 차지 */
   height: calc(100vh - 120px); /* About Green Cane 섹션 아래 높이 */
-  margin-top: 45px; /* 헤더와 About 섹션 높이를 제외한 위치 */
- 
+  margin-top: 45px;
   padding: 0; /* 내부 여백 제거 */
 }
 

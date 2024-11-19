@@ -60,5 +60,4 @@
   text-decoration: underline; /* Add underline on hover */
 }
 
-  </style>
-  
+</style>
