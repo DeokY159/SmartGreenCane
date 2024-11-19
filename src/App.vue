@@ -260,7 +260,7 @@ body {
 
 /* 섹션별 스타일링 */
 #gps_info, #battery_info, #impact_info, #sound_info {
-  margin-bottom: 20px;
+  margin-bottom: 65px;
   text-align: center;
 }
 

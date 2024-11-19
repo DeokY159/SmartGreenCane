@@ -108,7 +108,7 @@ export default {
 
 /* OK 버튼 스타일 */
 .ok-btn {
-  background-color: #007bff; /* 파란색 배경 */
+  background-color: #61A96B; /* 초록색 배경 */
   color: #fff; /* 흰색 글자 */
   font-size: 16px; /* 글자 크기 */
   border: none; /* 테두리 제거 */
