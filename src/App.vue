@@ -22,6 +22,7 @@
       <div id="right_section">
         <div id="gps_info">
           <h3>GPS</h3>
+          <img :src="require('@/assets/gps.png')" alt="GPS Icon" class="icon" />
         </div>
         <div id="battery_info">
           <h3>Battery</h3>
@@ -29,8 +30,7 @@
         </div>
         <div id="impact_info">
           <h3>Impact</h3>
-          <img :src="require('@/assets/impact.png')" alt="Impact Icon" class="icon" />
-          
+          <img :src="require('@/assets/impact.png')" alt="Impact Icon" class="icon" @click="showPopup" />
         </div>
         <div id="sound_info">
           <h3>Sound</h3>
@@ -38,6 +38,8 @@
         </div>
       </div>
     </div>
+    <!-- Popup Component -->
+    <Popup v-if="isPopupVisible" :impactValue="22" @close="isPopupVisible = false" />
   </div>
 </template>
 
@@ -45,22 +47,28 @@
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import navBar from './components/navBar.vue';
+import Popup from './components/Popup.vue';
 
 export default {
   name: 'App',
   components: {
     navBar,
+    Popup,
   },
   data() {
     return {
       userLocation: [37.5507583, 127.0741682], // 초기 사용자 좌표
-      map: null, 
+      map: null,
+      isPopupVisible: false, // Popup visibility 상태
     };
   },
   methods: {
     updateLocation(lat, lng) {
       this.userLocation = [lat, lng];
       this.map.setView(this.userLocation, 16); // 지도 중심 이동
+    },
+    showPopup() {
+      this.isPopupVisible = true; // Popup을 표시
     },
   },
   mounted() {
@@ -70,13 +78,13 @@ export default {
       attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
     }).addTo(this.map);
 
-     // 커스텀 아이콘 생성
+    // 커스텀 아이콘 생성
     const customIcon = L.icon({
       iconUrl: require('@/assets/custom-marker.png'), // 이미지 경로 (assets 폴더에 저장된 파일)
       iconSize: [32, 32], // 아이콘 크기
       iconAnchor: [16, 32], // 아이콘 앵커 위치
       popupAnchor: [0, -32], // 팝업 위치
-  });
+    });
 
     // 초기 마커 생성
     const marker = L.marker(this.userLocation, { icon: customIcon })
@@ -116,6 +124,7 @@ export default {
   },
 };
 </script>
+
 
 <style>
 body {
@@ -164,7 +173,6 @@ body {
   margin-left: 1%;
 }
 
-
 /* 왼쪽 프로필 섹션 */
 #profile_section {
   width: 13%; /* 프로필 섹션 너비 */
@@ -179,17 +187,32 @@ body {
   margin: 0; /* 외부 여백 제거 */
 }
 
-
-#profile {
-  text-align: center;
-  margin-bottom: 15px;
+#profile_info {
+  text-align: center; /* 텍스트 중앙 정렬 */
+  margin: 0; /* 외부 여백 제거 */
+  padding: 0; /* 내부 여백 제거 */
 }
 
+#profile_info p:first-child {
+  font-size: 20px; /* 홍길동 / 여의 글씨 크기 */
+  font-weight: bold; /* 강조 */
+  margin: 0 0 5px 0; /* 아래쪽에 약간의 간격 추가 */
+  padding: 0; /* 내부 패딩 제거 */
+}
+
+#profile_info p:last-child {
+  font-size: 16px; /* 생년월일의 글씨 크기 */
+  color: #555; /* 약간 흐린 색상 */
+  margin: 5px 0 0 0; /* 위쪽에 약간의 간격 추가 */
+  padding: 0; /* 내부 패딩 제거 */
+}
 #profile_picture {
-  width: 80px; /* 프로필 사진 크기 */
-  height: 80px;
-  border-radius: 50%; /* 원형 */
-  margin-bottom: 10px;
+  width: 90px; /* 프로필 사진 크기 */
+  height: 90px;
+  border-radius: 50%; /* 원형 사진 */
+  margin-bottom: 15px; /* 사진과 텍스트 사이 간격 */
+  margin: 0 auto 15px auto; /* 위, 양옆 중앙 정렬 */
+  display: block; /* block으로 설정하여 가로 중앙 정렬 적용 */
 }
 
 /* About Green Cane 섹션 */
@@ -232,20 +255,20 @@ body {
 
 /* 공통 아이콘 스타일 */
 .icon {
-  width: 50px; /* 아이콘 너비 */
-  height: 50px; /* 아이콘 높이 */
-  margin: 10px 0; /* 위아래 여백 */
+  width: 70px;
+  height: 70px;
+  margin: 10px 0;
   display: block;
 }
 
 /* 섹션별 스타일링 */
 #gps_info, #battery_info, #impact_info, #sound_info {
-  margin-bottom: 20px; /* 각 섹션 간격 */
-  text-align: center; /* 텍스트 중앙 정렬 */
+  margin-bottom: 20px;
+  text-align: center;
 }
 
 #gps_info h3, #battery_info h3, #impact_info h3, #sound_info h3 {
-  font-size: 16px;
+  font-size: 20px;
   margin-bottom: 10px;
 }
 
