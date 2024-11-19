@@ -1,14 +1,44 @@
 <template>
   <div>
-  <header>
-    <nav-bar id="nav" />
-  </header>
-  <div id="app">
-    <div id="main_title">
+    <header>
+      <nav-bar id="nav" />
+    </header>
+    <div id="about_section">
+      <h2>About Green Cane</h2>
     </div>
-    <div id="map"></div>
+    <div id="app">
+      <div id="profile_section">
+        <div id="profile">
+          <img src="@/assets/profile.png" alt="Profile Picture" id="profile_picture" />
+          <div id="profile_info">
+            <p><b>홍길동</b> / 여</p>
+            <p>1997.05.16</p>
+          </div>
+        </div>
+      </div>
+      <div id="map_section">
+        <div id="map"></div>
+      </div>
+      <div id="right_section">
+        <div id="gps_info">
+          <h3>GPS</h3>
+        </div>
+        <div id="battery_info">
+          <h3>Battery</h3>
+          <img :src="require('@/assets/battery.png')" alt="Battery Icon" class="icon" />
+        </div>
+        <div id="impact_info">
+          <h3>Impact</h3>
+          <img :src="require('@/assets/impact.png')" alt="Impact Icon" class="icon" />
+          
+        </div>
+        <div id="sound_info">
+          <h3>Sound</h3>
+          <img :src="require('@/assets/sound.png')" alt="Sound Icon" class="icon" />
+        </div>
+      </div>
+    </div>
   </div>
-</div>
 </template>
 
 <script>
@@ -91,16 +121,36 @@ export default {
 body {
   margin: 0;
   font-family: Arial, sans-serif;
+  height: 100vh; /* 화면 전체 높이를 설정 */
+  overflow: hidden; /* 스크롤바를 없앰 */
+}
+
+/* 전체 레이아웃 */
+#app {
+  margin: 0; /* 외부 여백 제거 */
+  padding: 0; /* 내부 패딩 제거 */
+  display: flex;
+  flex-direction: row;
+  height: calc(100vh - 50px); /* 헤더 높이를 제외한 화면 높이 */
+}
+
+#map_section {
+  display: flex;
+  justify-content: center; /* 가로 가운데 정렬 */
+  align-items: center; /* 세로 가운데 정렬 */
+  flex: 1; /* 남은 공간을 차지 */
+  height: calc(100vh - 120px); /* About Green Cane 섹션 아래 높이 */
+  margin-top: 45px; /* 헤더와 About 섹션 높이를 제외한 위치 */
+  margin-right: 0%; /* 오른쪽 여백을 고정 */
+  margin-left: 0%;
+  padding: 0; /* 내부 여백 제거 */
 }
 
 #map {
-  height: 60vh;
-  width: 60%;
-  float: left;
-  border-radius: 10px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
-  margin-left: 20%;
-  margin-top: 50px;
+  width: 80%; /* 부모 섹션의 너비를 차지 */
+  height: 100%; /* 부모 섹션의 높이를 차지 */
+  border-radius: 10px; /* 둥근 테두리 */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* 약간의 그림자 */
 }
 
 #main_title h1 {
@@ -114,10 +164,89 @@ body {
   margin-left: 1%;
 }
 
-#nav {
-  margin-bottom: 15px;
-  min-width: 1200px;
-  overflow: hidden;
-  margin-right: 0px;
+
+/* 왼쪽 프로필 섹션 */
+#profile_section {
+  width: 13%; /* 프로필 섹션 너비 */
+  background-color: #eaf5e9;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 15px; /* 내부 여백 */
+  border-right: 2px solid #c3e6cb;
+  box-shadow: 2px 0px 5px rgba(0, 0, 0, 0.1);
+  height: 100vh; /* 전체 화면 높이를 차지 */
+  margin: 0; /* 외부 여백 제거 */
 }
+
+
+#profile {
+  text-align: center;
+  margin-bottom: 15px;
+}
+
+#profile_picture {
+  width: 80px; /* 프로필 사진 크기 */
+  height: 80px;
+  border-radius: 50%; /* 원형 */
+  margin-bottom: 10px;
+}
+
+/* About Green Cane 섹션 */
+#about_section {
+  text-align: left;
+  background-color: #d9f2e6; /* 연한 초록색 배경 */
+  padding: 10px 0; /* 상하 여백 */
+  border-bottom: 2px solid #c3e6cb; /* 아래쪽 테두리 */
+  font-family: Arial, sans-serif;
+  width: calc(100% - 12%); /* 프로필 섹션을 제외한 나머지 공간 차지 */
+  margin-left: 13.9%; /* 프로필 섹션 만큼 왼쪽 여백 추가 */
+  position: absolute; /* 겹침 방지 */
+  top: 69px; /* 헤더 바로 아래에 위치 */
+  z-index: 1; /* 다른 요소 위에 표시 */
+}
+
+#about_section h2 {
+  margin: 0;
+  font-size: 20px;
+  color: #4d4d4d; /* 텍스트 색상 */
+  font-weight: normal; /* 가벼운 글씨체 */
+  padding-left: 20px;
+}
+
+#right_section {
+  width: 13%; /* 오른쪽 섹션의 너비 */
+  background-color: #eaf5e9; /* 배경색 */
+  display: flex;
+  flex-direction: column; /* 세로 정렬 */
+  align-items: center; /* 가로 가운데 정렬 */
+  padding: 15px; /* 내부 여백 */
+  border-left: 2px solid #c3e6cb; /* 왼쪽 테두리 */
+  box-shadow: -2px 0px 5px rgba(0, 0, 0, 0.1); /* 왼쪽 그림자 */
+  height: calc(100vh - 120px); /* 상단 섹션을 제외한 화면 높이 */
+  position: absolute; /* 위치를 고정 */
+  right: 0; /* 오른쪽 끝에 붙임 */
+
+  top: 110px; /* Green cane management application + About Green Cane의 높이 */
+}
+
+/* 공통 아이콘 스타일 */
+.icon {
+  width: 50px; /* 아이콘 너비 */
+  height: 50px; /* 아이콘 높이 */
+  margin: 10px 0; /* 위아래 여백 */
+  display: block;
+}
+
+/* 섹션별 스타일링 */
+#gps_info, #battery_info, #impact_info, #sound_info {
+  margin-bottom: 20px; /* 각 섹션 간격 */
+  text-align: center; /* 텍스트 중앙 정렬 */
+}
+
+#gps_info h3, #battery_info h3, #impact_info h3, #sound_info h3 {
+  font-size: 16px;
+  margin-bottom: 10px;
+}
+
 </style>
