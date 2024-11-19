@@ -1,4 +1,3 @@
-/* eslint-disable */
 <template>
   <div>
     <header>
@@ -49,6 +48,7 @@ import L from 'leaflet'
 import 'leaflet/dist/leaflet.css'
 import navBar from './components/navBar.vue'
 import Popup from './components/Popup.vue'
+import {fetchData} from './components/Importing.js'
 
 export default {
   name: 'App',
@@ -60,18 +60,56 @@ export default {
     return {
       userLocation: [37.5507583, 127.0741682], // 초기 사용자 좌표
       map: null,
-      isPopupVisible: false // Popup visibility 상태
+      marker : null,
+      isPopupVisible: false, // Popup visibility 상태
+      gpsData : null
     }
   },
   methods: {
     updateLocation (lat, lng) {
       this.userLocation = [lat, lng]
-      this.map.setView(this.userLocation, 16) // 지도 중심 이동
+      this.map.flyTo(this.userLocation, 16) // 지도 중심 이동  
+      this.marker.setLatLng(this.userLocation);
     },
+
     showPopup () {
       this.isPopupVisible = true // Popup을 표시
+    },
+
+    // tinyIoT에서 gps 센서 데이터 업데이트
+    async updategpsSensorData () {
+      const resources = 'gps'
+      const gpsconValue = await fetchData(resources);
+      console.log('받아온 GPS 데이터:', gpsconValue); // 받은 데이터 확인
+      this.gpsData = gpsconValue;
+      const parsedLocation = JSON.parse(gpsconValue);
+      this.updateLocation(parsedLocation[0], parsedLocation[1]);
+      console.log('GPS 데이터로 userLocation 업데이트 완료:', this.userLocation);
+    },
+
+    // tinyIoT에서 speed 센서 데이터 업데이트
+    async updatespeedSensorData () {
+      const resources = 'speed'
+      const speedconValue = await fetchData(resources);
+      console.log('받아온 speed 데이터:', speedconValue); // 받은 데이터 확인
+    },
+
+    // tinyIoT에서 shock 센서 데이터 업데이트
+    async updateshockSensorData () {
+      const resources = 'shock'
+      const speedconValue = await fetchData(resources);
+      console.log('받아온 shock 데이터:', speedconValue); // 받은 데이터 확인
+    },
+
+    // tinyIoT에서 onoff 센서 데이터 업데이트
+    async updateonoffSensorData () {
+      const resources = 'onoff'
+      const speedconValue = await fetchData(resources);
+      console.log('받아온 onoff 데이터:', speedconValue); // 받은 데이터 확인
     }
+
   },
+
   mounted () {
     // 지도 생성
     this.map = L.map('map').setView(this.userLocation, 16)
@@ -79,6 +117,7 @@ export default {
       attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
     }).addTo(this.map)
 
+    
     // 커스텀 아이콘 생성
     const customIcon = L.icon({
       iconUrl: require('@/assets/custom-marker.png'), // 이미지 경로 (assets 폴더에 저장된 파일)
@@ -93,36 +132,20 @@ export default {
       .bindPopup('<b>사용자 위치</b><br>현재 위치입니다.')
       .openPopup()
 
-    // GeoJSON 데이터 추가
-    const geojsonData = {
-      type: 'FeatureCollection',
-      features: [
-        {
-          type: 'Feature',
-          geometry: {
-            type: 'Point',
-            coordinates: [126.978, 37.5665] // 서울 좌표
-          },
-          properties: {
-            name: 'Seoul City'
-          }
-        }
-      ]
-    }
 
-    L.geoJSON(geojsonData, {
-      pointToLayer: (feature, latlng) => {
-        return L.circleMarker(latlng, {
-          radius: 8,
-          fillColor: 'blue',
-          color: 'blue',
-          weight: 1,
-          opacity: 1,
-          fillOpacity: 0.8
-        })
-      }
-    }).addTo(this.map)
+    this.updategpsSensorData();
+    this.updatespeedSensorData();
+    this.updateshockSensorData();
+    this.updateonoffSensorData();
+
+    setInterval(() => {
+      this.updategpsSensorData();
+      this.updatespeedSensorData();
+      this.updateshockSensorData();
+      this.updateonoffSensorData();
+    }, 5000);
   }
+
 }
 </script>
 
