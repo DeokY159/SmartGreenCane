@@ -145,18 +145,15 @@ body {
 
 #map_section {
   display: flex;
-  justify-content: center; /* 가로 가운데 정렬 */
-  align-items: center; /* 세로 가운데 정렬 */
   flex: 1; /* 남은 공간을 차지 */
   height: calc(100vh - 120px); /* About Green Cane 섹션 아래 높이 */
   margin-top: 45px; /* 헤더와 About 섹션 높이를 제외한 위치 */
-  margin-right: 0%; /* 오른쪽 여백을 고정 */
-  margin-left: 0%;
+ 
   padding: 0; /* 내부 여백 제거 */
 }
 
 #map {
-  width: 80%; /* 부모 섹션의 너비를 차지 */
+  width: 91%; /* 부모 섹션의 너비를 차지 */
   height: 100%; /* 부모 섹션의 높이를 차지 */
   border-radius: 10px; /* 둥근 테두리 */
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* 약간의 그림자 */
