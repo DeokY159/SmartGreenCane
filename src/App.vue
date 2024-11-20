@@ -34,27 +34,34 @@
         <div id="gps_info">
           <h3>GPS</h3>
           <img :src="require('@/assets/gps.png')" alt="GPS Icon" class="icon" />
-          <div class="info_box"><p>{{this.gpsData_N}}</p></div> 
-          <div class="info_box"><p>{{this.gpsData_E}}</p></div>
+          <div class="info_box"><p>{{ gpsData_N }}</p></div>
+          <div class="info_box"><p>{{ gpsData_E }}</p></div>
         </div>
         <div id="battery_info">
           <h3>Battery</h3>
-          <img :src="require('@/assets/battery.png')" alt="Battery Icon" class="icon" />
-          <div class="info_box"><p>{{this.batteryData}}%</p></div> 
+          <img
+            :src="require('@/assets/Battery.png')"
+            alt="Battery Icon"
+            class="icon"
+            @click="showBatteryPopup"
+          />
+          <div class="info_box"><p>{{ batteryData }}%</p></div>
         </div>
         <div id="impact_info">
           <h3>Impact</h3>
           <img :src="require('@/assets/impact.png')" alt="Impact Icon" class="icon" @click="showPopup" />
-          <div class="info_box"><p>{{ this.impcatData }}</p></div> 
+          <div class="info_box"><p>{{ impcatData }}</p></div>
         </div>
         <div id="sound_info">
           <h3>Sound</h3>
           <img :src="require('@/assets/sound.png')" alt="Sound Icon" class="icon" />
-          <div class="info_box"><p>{{ this.soundData }}</p></div> 
+          <div class="info_box"><p>{{ soundData }}</p></div>
         </div>
       </div>
     </div>
-    <!-- Popup Component -->
+    <!-- Battery Popup -->
+    <BatteryPopup v-if="isBatteryPopupVisible" @close="isBatteryPopupVisible = false" />
+    <!-- Impact Popup -->
     <Popup v-if="isPopupVisible" :impactValue="22" @close="isPopupVisible = false" />
   </div>
 </template>
@@ -64,13 +71,15 @@ import L from 'leaflet'
 import 'leaflet/dist/leaflet.css'
 import navBar from './components/navBar.vue'
 import Popup from './components/Popup.vue'
+import BatteryPopup from "./components/BatteryPopup.vue";
 import {fetchData,fetch_aeData} from './components/Importing.js'
 
 export default {
   name: 'App',
   components: {
     navBar,
-    Popup
+    Popup,
+    BatteryPopup
   },
   data () {
     return {
@@ -78,6 +87,7 @@ export default {
       map: null,
       marker : null,
       isPopupVisible: false, // Popup visibility 상태
+      isBatteryPopupVisible: false, // Battery Popup 상태
       gpsData_N : null,
       gpsData_E : null,
       batteryData : null,
@@ -95,6 +105,9 @@ export default {
 
     showPopup () {
       this.isPopupVisible = true // Popup을 표시
+    },
+    showBatteryPopup() {
+      this.isBatteryPopupVisible = true; // Battery Popup 표시
     },
 
     // tinyIoT에서 gps 센서 데이터 업데이트
