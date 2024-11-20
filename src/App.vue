@@ -17,7 +17,7 @@
         </div>
         <hr class="divider" />
         <div id="info_section">
-          <p>화이트케인의 사용자가 위험에 처한 상황인지 아닌지 판단하여 보호자에게 알림을 보내는 서비스를 제공하고 있습니다. 시각장애인의 보다 안전한 생활을 목표로 하고 있습니다.</p>
+          <p>스마트 그린케인은 시각장애인이 위험에 처한 상황인지 아닌지 판단하여 보호자에게 알림을 보내는 서비스를 제공하고 있습니다. 시각장애인의 보다 안전한 생활을 목표로 하고 있습니다.</p>
         </div>
         <hr class="divider" />
         <div id="weather_section">
@@ -50,7 +50,6 @@
         <div id="sound_info">
           <h3>Sound</h3>
           <img :src="require('@/assets/sound.png')" alt="Sound Icon" class="icon" />
-          <div class="info_box"><p>{{ soundData }}</p></div>
         </div>
       </div>
     </div>
@@ -149,7 +148,6 @@ export default {
       if (this.onoffData === 'off' && !this.betterypopupShown){
         this.isBatteryPopupVisible = true;
         this.betterypopupShown = true;
-        this.soundData = "off", // 팝업이 뜰 동안만 하고 싶은데... 팝업이 뜨면 계속 on으로 유지되네
         console.log('배터리 팝업이 표시되었습니다'); // 로그 확인
       }
     },
