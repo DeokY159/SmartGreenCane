@@ -39,12 +39,7 @@
         </div>
         <div id="battery_info">
           <h3>Battery</h3>
-          <img
-            :src="require('@/assets/Battery.png')"
-            alt="Battery Icon"
-            class="icon"
-            @click="showBatteryPopup"
-          />
+          <img :src="require('@/assets/Battery.png')" alt="Battery Icon" class="icon" @click="showBatteryPopup"/>
           <div class="info_box"><p>{{ batteryData }}%</p></div>
         </div>
         <div id="impact_info">
@@ -92,8 +87,9 @@ export default {
       gpsData_E : null,
       batteryData : null,
       impcatData : null, 
-      soundData : null,
-      popupShown: false
+      soundData : "off",
+      betterypopupShown: false,
+      impacntopoupShown: false,
     }
   },
   methods: {
@@ -133,15 +129,29 @@ export default {
     // tinyIoT에서 becane 하위의 shock 센서 데이터 업데이트
     async updateshockSensorData () {
       const resources = 'shock'
-      const speedconValue = await fetchData(resources);
-      console.log('받아온 shock 데이터:', speedconValue); // 받은 데이터 확인
+      const shockconValue = await fetchData(resources);
+      console.log('받아온 shock 데이터:', shockconValue); // 받은 데이터 확인
+
+      if(shockconValue === 'is' && !this.impacntopoupShown){
+        this.isPopupVisible = true;
+        this.impacntopoupShown = true;
+      }
     },
 
     // tinyIoT에서 becane 하위의 onoff 센서 데이터 업데이트
     async updateonoffSensorData () {
       const resources = 'onoff'
-      const speedconValue = await fetchData(resources);
-      console.log('받아온 onoff 데이터:', speedconValue); // 받은 데이터 확인
+      const onoffconValue = await fetchData(resources);
+      console.log('받아온 onoff 데이터:', onoffconValue); // 데이터 확인
+      console.log('현재 Popup 상태:', this.betterypopupShown); // 플래그 상태 확인
+      this.onoffData = onoffconValue;
+
+      if (this.onoffData === 'off' && !this.betterypopupShown){
+        this.isBatteryPopupVisible = true;
+        this.betterypopupShown = true;
+        this.soundData = "off", // 팝업이 뜰 동안만 하고 싶은데... 팝업이 뜨면 계속 on으로 유지되네
+        console.log('배터리 팝업이 표시되었습니다'); // 로그 확인
+      }
     },
 
     // tinyIoT에서 cane1 하위의 배터리센서의 데이터를 업데이트
@@ -164,12 +174,6 @@ export default {
     async updateSoundData () {
       const resources = 'sound'
       const SoundValue = await fetch_aeData(resources);
-      this.soundData = SoundValue;
-      if (this.soundData === 'on' && !this.popupShown ){
-        this.isPopupVisible = true;
-        this.popupShown = true;
-      }
-      console.log("받아온 사운드 데이터", SoundValue);
     }
 
   },
