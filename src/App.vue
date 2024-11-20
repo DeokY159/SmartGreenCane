@@ -15,6 +15,17 @@
             <p>1997.05.16</p>
           </div>
         </div>
+        <hr class="divider" />
+        <div id="info_section">
+          <p>화이트케인의 사용자가 위험에 처한 상황인지 아닌지 판단하여 보호자에게 알림을 보내는 서비스를 제공하고 있습니다. 시각장애인의 보다 안전한 생활을 목표로 하고 있습니다.</p>
+        </div>
+        <hr class="divider" />
+        <div id="weather_section">
+          <h3>날씨 정보</h3>
+          <div id="weather_icon">
+            <img src="@/assets/sun.png" alt="Sun Icon" class="icon" />
+          </div>
+        </div>
       </div>
       <div id="map_section">
         <div id="map"></div>
@@ -23,18 +34,23 @@
         <div id="gps_info">
           <h3>GPS</h3>
           <img :src="require('@/assets/gps.png')" alt="GPS Icon" class="icon" />
+          <div class="info_box"></div> <!-- 빈 박스 -->
+          <div class="info_box"></div> <!-- 빈 박스 -->
         </div>
         <div id="battery_info">
           <h3>Battery</h3>
           <img :src="require('@/assets/battery.png')" alt="Battery Icon" class="icon" />
+          <div class="info_box"></div> <!-- 빈 박스 -->
         </div>
         <div id="impact_info">
           <h3>Impact</h3>
           <img :src="require('@/assets/impact.png')" alt="Impact Icon" class="icon" @click="showPopup" />
+          <div class="info_box"></div> <!-- 빈 박스 -->
         </div>
         <div id="sound_info">
           <h3>Sound</h3>
           <img :src="require('@/assets/sound.png')" alt="Sound Icon" class="icon" />
+          <div class="info_box"></div> <!-- 빈 박스 -->
         </div>
       </div>
     </div>
@@ -234,6 +250,39 @@ body {
   display: block; /* block으로 설정하여 가로 중앙 정렬 적용 */
 }
 
+.divider {
+  width: 100%;
+  border: 0;
+  border-top: 1px solid #c3e6cb;
+  margin: 20px 0;
+}
+
+#info_section {
+  padding: 15px; /* 섹션 여백 추가 */
+  text-align: justify; /* 텍스트를 양쪽 정렬로 설정 */
+  font-size: 15px; /* 텍스트 크기를 약간 키움 */
+  line-height: 1.3; /* 줄 간격을 넓혀 가독성 향상 */
+  font-family: 'Noto Sans', Arial, sans-serif; /* 깔끔한 글꼴 설정 */
+  color: #444; /* 부드러운 색상 */
+  background-color: #f8f9fa; /* 약간의 배경색 추가 */
+  border-radius: 8px; /* 둥근 모서리 */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* 약간의 그림자 */
+}
+
+#weather_section {
+  padding: 10px;
+  text-align: center; /* 텍스트와 아이콘을 중앙 정렬 */
+  font-size: 16px;
+  color: #333;
+}
+
+#weather_icon img {
+  margin-top: 10px; /* 텍스트와 아이콘 사이 여백 */
+  margin: 0 auto 15px auto; /* 위, 양옆 중앙 정렬 */
+  width: 70px; /* 아이콘 너비 */
+  height: 70px; /* 아이콘 높이 */
+}
+
 /* About Green Cane 섹션 */
 #about_section {
   text-align: left;
@@ -272,23 +321,35 @@ body {
   top: 110px; /* Green cane management application + About Green Cane의 높이 */
 }
 
-/* 공통 아이콘 스타일 */
 .icon {
   width: 70px;
   height: 70px;
-  margin: 10px 0;
-  display: block;
+  margin: 3px 0; /* 위아래 여백 최소화 */
 }
+
+.info_box {
+  background-color: #f8f9fa; /* 박스 배경색 */
+  border: 1px solid #c3e6cb; /* 테두리 */
+  border-radius: 8px; /* 둥근 모서리 */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* 약간의 그림자 */
+  width: 100%; /* 박스 너비 */
+  height: 30px; /* 박스 높이 */
+  margin: 5px 0; /* 위아래 여백 최소화 */
+  display: flex; /* 박스를 flex로 설정 */
+  justify-content: center; /* 중앙 정렬 */
+  align-items: center; /* 중앙 정렬 */
+}
+
 
 /* 섹션별 스타일링 */
 #gps_info, #battery_info, #impact_info, #sound_info {
-  margin-bottom: 65px;
+  margin-bottom: 10px;
   text-align: center;
 }
 
 #gps_info h3, #battery_info h3, #impact_info h3, #sound_info h3 {
   font-size: 20px;
-  margin-bottom: 10px;
+  margin-bottom: 5px;
 }
 
 </style>
