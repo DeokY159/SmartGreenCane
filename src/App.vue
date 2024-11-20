@@ -158,7 +158,7 @@ export default {
       }
       console.log("받아온 사운드 데이터", SoundValue);
     }
-    
+
   },
 
   mounted () {
@@ -363,9 +363,10 @@ body {
 }
 
 .icon {
-  width: 70px;
-  height: 70px;
-  margin: 3px 0; /* 위아래 여백 최소화 */
+  width: 50px;
+  height: 50px;
+  margin: 1px 0; /* 위아래 여백 최소화 */
+  transition: all 0.3s ease-in-out; /* 크기 변화에 부드러운 전환 효과 */
 }
 
 .info_box {
@@ -374,11 +375,25 @@ body {
   border-radius: 8px; /* 둥근 모서리 */
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* 약간의 그림자 */
   width: 100%; /* 박스 너비 */
-  height: 30px; /* 박스 높이 */
-  margin: 5px 0; /* 위아래 여백 최소화 */
+  height: 25px; /* 박스 높이 */
+  margin: 3px 0; /* 위아래 여백 최소화 */
   display: flex; /* 박스를 flex로 설정 */
   justify-content: center; /* 중앙 정렬 */
   align-items: center; /* 중앙 정렬 */
+  transition: all 0.3s ease-in-out; /* 부드러운 전환 효과 */
+}
+
+@media (max-width: 768px) {
+  .info_box {
+    width: 80%; /* 작은 화면에서는 박스 크기 80%로 설정 */
+  }
+}
+
+/* 더 작은 화면에서 박스 크기 추가 축소 */
+@media (max-width: 480px) {
+  .info_box {
+    width: 70%; /* 매우 작은 화면에서는 박스 크기 70%로 설정 */
+  }
 }
 
 
