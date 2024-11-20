@@ -261,8 +261,7 @@ body {
   padding: 15px; /* 섹션 여백 추가 */
   text-align: justify; /* 텍스트를 양쪽 정렬로 설정 */
   font-size: 14px; /* 텍스트 크기를 약간 키움 */
-  line-height: 1.2; /* 줄 간격을 넓혀 가독성 향상 */
-  letter-spacing: 0px;
+  line-height: 1.3; /* 줄 간격을 넓혀 가독성 향상 */
   font-family: 'Noto Sans', Arial, sans-serif; /* 깔끔한 글꼴 설정 */
   color: #444; /* 부드러운 색상 */
   background-color: #f8f9fa; /* 약간의 배경색 추가 */
