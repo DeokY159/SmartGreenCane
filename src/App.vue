@@ -34,23 +34,23 @@
         <div id="gps_info">
           <h3>GPS</h3>
           <img :src="require('@/assets/gps.png')" alt="GPS Icon" class="icon" />
-          <div class="info_box"></div> <!-- 빈 박스 -->
-          <div class="info_box"></div> <!-- 빈 박스 -->
+          <div class="info_box"><p>{{this.gpsData_N}}</p></div> 
+          <div class="info_box"><p>{{this.gpsData_E}}</p></div>
         </div>
         <div id="battery_info">
           <h3>Battery</h3>
           <img :src="require('@/assets/battery.png')" alt="Battery Icon" class="icon" />
-          <div class="info_box"></div> <!-- 빈 박스 -->
+          <div class="info_box"><p>{{this.batteryData}}%</p></div> 
         </div>
         <div id="impact_info">
           <h3>Impact</h3>
           <img :src="require('@/assets/impact.png')" alt="Impact Icon" class="icon" @click="showPopup" />
-          <div class="info_box"></div> <!-- 빈 박스 -->
+          <div class="info_box"><p>{{ this.impcatData }}</p></div> 
         </div>
         <div id="sound_info">
           <h3>Sound</h3>
           <img :src="require('@/assets/sound.png')" alt="Sound Icon" class="icon" />
-          <div class="info_box"></div> <!-- 빈 박스 -->
+          <div class="info_box"><p>{{ this.soundData }}</p></div> 
         </div>
       </div>
     </div>
@@ -64,7 +64,7 @@ import L from 'leaflet'
 import 'leaflet/dist/leaflet.css'
 import navBar from './components/navBar.vue'
 import Popup from './components/Popup.vue'
-import {fetchData} from './components/Importing.js'
+import {fetchData,fetch_aeData} from './components/Importing.js'
 
 export default {
   name: 'App',
@@ -78,7 +78,12 @@ export default {
       map: null,
       marker : null,
       isPopupVisible: false, // Popup visibility 상태
-      gpsData : null
+      gpsData_N : null,
+      gpsData_E : null,
+      batteryData : null,
+      impcatData : null, 
+      soundData : null,
+      popupShown: false
     }
   },
   methods: {
@@ -97,33 +102,63 @@ export default {
       const resources = 'gps'
       const gpsconValue = await fetchData(resources);
       console.log('받아온 GPS 데이터:', gpsconValue); // 받은 데이터 확인
-      this.gpsData = gpsconValue;
       const parsedLocation = JSON.parse(gpsconValue);
+      this.gpsData_N = parsedLocation[0];
+      this.gpsData_E = parsedLocation[1];
       this.updateLocation(parsedLocation[0], parsedLocation[1]);
+      console.log("각각 데이터", this.gpsData_N, this.gpsData_E);
       console.log('GPS 데이터로 userLocation 업데이트 완료:', this.userLocation);
     },
 
-    // tinyIoT에서 speed 센서 데이터 업데이트
+    // tinyIoT에서 becane 하위의 speed 센서 데이터 업데이트
     async updatespeedSensorData () {
       const resources = 'speed'
       const speedconValue = await fetchData(resources);
       console.log('받아온 speed 데이터:', speedconValue); // 받은 데이터 확인
     },
 
-    // tinyIoT에서 shock 센서 데이터 업데이트
+    // tinyIoT에서 becane 하위의 shock 센서 데이터 업데이트
     async updateshockSensorData () {
       const resources = 'shock'
       const speedconValue = await fetchData(resources);
       console.log('받아온 shock 데이터:', speedconValue); // 받은 데이터 확인
     },
 
-    // tinyIoT에서 onoff 센서 데이터 업데이트
+    // tinyIoT에서 becane 하위의 onoff 센서 데이터 업데이트
     async updateonoffSensorData () {
       const resources = 'onoff'
       const speedconValue = await fetchData(resources);
       console.log('받아온 onoff 데이터:', speedconValue); // 받은 데이터 확인
-    }
+    },
 
+    // tinyIoT에서 cane1 하위의 배터리센서의 데이터를 업데이트
+    async updateBatteryData () {
+      const resources = 'battery'
+      const BatteryValue = await fetch_aeData(resources);
+      this.batteryData = BatteryValue;
+      console.log("받아온 배터리 데이터", BatteryValue);
+    },
+
+    // tinyIoT에서 cane1 하위의 impact 센서의 데이터를 업데이트
+    async updateImpactData () {
+      const resources = 'impact'
+      const ImpactValue = await fetch_aeData(resources);
+      this.impcatData = ImpactValue;
+      console.log("받아온 임팩트 데이터", ImpactValue);
+    },
+
+    // tinyIoT에서 cane1 하위의 sound 센서의 데이터를 업데이트
+    async updateSoundData () {
+      const resources = 'sound'
+      const SoundValue = await fetch_aeData(resources);
+      this.soundData = SoundValue;
+      if (this.soundData === 'on' && !this.popupShown ){
+        this.isPopupVisible = true;
+        this.popupShown = true;
+      }
+      console.log("받아온 사운드 데이터", SoundValue);
+    }
+    
   },
 
   mounted () {
@@ -153,12 +188,18 @@ export default {
     this.updatespeedSensorData();
     this.updateshockSensorData();
     this.updateonoffSensorData();
+    this.updateBatteryData();
+    this.updateImpactData ();
+    this.updateSoundData();
 
     setInterval(() => {
       this.updategpsSensorData();
       this.updatespeedSensorData();
       this.updateshockSensorData();
       this.updateonoffSensorData();
+      this.updateBatteryData();
+      this.updateImpactData();
+      this.updateSoundData();
     }, 5000);
   }
 
