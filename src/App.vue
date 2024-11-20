@@ -11,17 +11,17 @@
         <div id="profile">
           <img src="@/assets/profile.png" alt="Profile Picture" id="profile_picture" />
           <div id="profile_info">
-            <p><b>홍길동</b> / 여</p>
+            <p><b>Hong Gil Dong</b> / Female</p>
             <p>1997.05.16</p>
           </div>
         </div>
         <hr class="divider" />
         <div id="info_section">
-          <p>스마트 그린케인은 시각장애인이 위험에 처한 상황인지 아닌지 판단하여 보호자에게 알림을 보내는 서비스를 제공하고 있습니다. 시각장애인의 보다 안전한 생활을 목표로 하고 있습니다.</p>
+          <p>We provide a service that determines whether the user of Green Cane is in danger and sends a notification to the carer. We aims to make life safer for the blind people.</p>
         </div>
         <hr class="divider" />
         <div id="weather_section">
-          <h3>날씨 정보</h3>
+          <h3>Weather info</h3>
           <div id="weather_icon">
             <img src="@/assets/sun.png" alt="Sun Icon" class="icon" />
           </div>
@@ -247,10 +247,14 @@ body {
 }
 
 #map {
-  width: 91%; /* 부모 섹션의 너비를 차지 */
-  height: 100%; /* 부모 섹션의 높이를 차지 */
-  border-radius: 10px; /* 둥근 테두리 */
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* 약간의 그림자 */
+  width: 90%; /* 부모 섹션의 너비를 차지 */
+  height: 99%; /* 부모 섹션의 높이를 차지 */
+  margin-top: 5px;    /* 위쪽 여백 */
+  margin-bottom: 5px; /* 아래쪽 여백 */
+  margin-left: 7px;   /* 왼쪽 여백 */
+  margin-right: 5px;  /* 오른쪽 여백 */
+  border-radius: 5px; /* 둥근 테두리 */
+
 }
 
 #main_title h1 {
@@ -267,25 +271,27 @@ body {
 /* 왼쪽 프로필 섹션 */
 #profile_section {
   width: 13%; /* 프로필 섹션 너비 */
-  background-color: #eaf5e9;
+  background-color: #dde9dc;
   display: flex;
   flex-direction: column;
   align-items: center;
   padding: 15px; /* 내부 여백 */
-  border-right: 2px solid #c3e6cb;
+  border-right: 2px solid #b8d8bf;
   box-shadow: 2px 0px 5px rgba(0, 0, 0, 0.1);
   height: 100vh; /* 전체 화면 높이를 차지 */
   margin: 0; /* 외부 여백 제거 */
 }
 
 #profile_info {
+  transform: translateY(35px); /* 아이콘을 35px 아래로 이동 */
   text-align: center; /* 텍스트 중앙 정렬 */
   margin: 0; /* 외부 여백 제거 */
   padding: 0; /* 내부 여백 제거 */
+
 }
 
 #profile_info p:first-child {
-  font-size: 20px; /* 홍길동 / 여의 글씨 크기 */
+  font-size: 15px; /* 홍길동 / 여의 글씨 크기 */
   font-weight: bold; /* 강조 */
   margin: 0 0 5px 0; /* 아래쪽에 약간의 간격 추가 */
   padding: 0; /* 내부 패딩 제거 */
@@ -298,6 +304,8 @@ body {
   padding: 0; /* 내부 패딩 제거 */
 }
 #profile_picture {
+  background-color: #ffffff;
+  transform: translateY(35px); /* 아이콘을 35px 아래로 이동 */
   width: 90px; /* 프로필 사진 크기 */
   height: 90px;
   border-radius: 50%; /* 원형 사진 */
@@ -307,13 +315,15 @@ body {
 }
 
 .divider {
+  transform: translateY(50px); /* 아이콘을 50px 아래로 이동 */
   width: 100%;
   border: 0;
-  border-top: 1px solid #c3e6cb;
+  border-top: 1px solid #a3b9a8;
   margin: 20px 0;
 }
 
 #info_section {
+  transform: translateY(60px); /* 아이콘을 60px 아래로 이동 */
   padding: 15px; /* 섹션 여백 추가 */
   text-align: justify; /* 텍스트를 양쪽 정렬로 설정 */
   font-size: 14px; /* 텍스트 크기를 약간 키움 */
@@ -323,9 +333,12 @@ body {
   background-color: #f8f9fa; /* 약간의 배경색 추가 */
   border-radius: 8px; /* 둥근 모서리 */
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* 약간의 그림자 */
+  margin-top: 10px;
+  margin-bottom: 40px;
 }
 
 #weather_section {
+  transform: translateY(50px); /* 아이콘을 50px 아래로 이동 */
   padding: 10px;
   text-align: center; /* 텍스트와 아이콘을 중앙 정렬 */
   font-size: 16px;
@@ -342,9 +355,9 @@ body {
 /* About Green Cane 섹션 */
 #about_section {
   text-align: left;
-  background-color: #d9f2e6; /* 연한 초록색 배경 */
+  background-color: #4e684f; /* 연한 초록색 배경 */
   padding: 10px 0; /* 상하 여백 */
-  border-bottom: 2px solid #c3e6cb; /* 아래쪽 테두리 */
+  border-bottom: 2px solid #a8c1ae; /* 아래쪽 테두리 */
   font-family: Arial, sans-serif;
   width: calc(100% - 12%); /* 프로필 섹션을 제외한 나머지 공간 차지 */
   margin-left: 13.9%; /* 프로필 섹션 만큼 왼쪽 여백 추가 */
@@ -356,7 +369,7 @@ body {
 #about_section h2 {
   margin: 0;
   font-size: 20px;
-  color: #4d4d4d; /* 텍스트 색상 */
+  color: #f3fdf1; /* 텍스트 색상 */
   font-weight: normal; /* 가벼운 글씨체 */
   padding-left: 20px;
 }
@@ -368,18 +381,18 @@ body {
   flex-direction: column; /* 세로 정렬 */
   align-items: center; /* 가로 가운데 정렬 */
   padding: 15px; /* 내부 여백 */
-  border-left: 2px solid #c3e6cb; /* 왼쪽 테두리 */
+  border-left: 2px solid #a8c1ae; /* 왼쪽 테두리 */
   box-shadow: -2px 0px 5px rgba(0, 0, 0, 0.1); /* 왼쪽 그림자 */
   height: calc(100vh - 120px); /* 상단 섹션을 제외한 화면 높이 */
   position: absolute; /* 위치를 고정 */
   right: 0; /* 오른쪽 끝에 붙임 */
-
   top: 110px; /* Green cane management application + About Green Cane의 높이 */
+
 }
 
 .icon {
-  width: 50px;
-  height: 50px;
+  width: 60px;
+  height: 60px;
   margin: 1px 0; /* 위아래 여백 최소화 */
   transition: all 0.3s ease-in-out; /* 크기 변화에 부드러운 전환 효과 */
 }
@@ -414,13 +427,15 @@ body {
 
 /* 섹션별 스타일링 */
 #gps_info, #battery_info, #impact_info, #sound_info {
+  width: 70%;
   margin-bottom: 10px;
   text-align: center;
 }
 
 #gps_info h3, #battery_info h3, #impact_info h3, #sound_info h3 {
-  font-size: 20px;
+  font-size: 18px;
   margin-bottom: 5px;
+  text-align: left; /* 텍스트를 왼쪽 정렬 */
 }
 
 </style>
