@@ -195,7 +195,7 @@ export default {
     // 초기 마커 생성
     this.marker = L.marker(this.userLocation, { icon: customIcon })
       .addTo(this.map)
-      .bindPopup('<b>사용자 위치</b><br>현재 위치입니다.')
+      .bindPopup('<b>User Location</b><br>This is user\'s current location.')
       .openPopup()
 
 
