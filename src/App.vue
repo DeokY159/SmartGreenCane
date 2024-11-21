@@ -391,8 +391,8 @@ body {
 }
 
 .icon {
-  width: 60px;
-  height: 60px;
+  width: 70px;
+  height: 70px;
   margin: 1px 0; /* 위아래 여백 최소화 */
   transition: all 0.3s ease-in-out; /* 크기 변화에 부드러운 전환 효과 */
 }
