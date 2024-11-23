@@ -2,6 +2,7 @@ from flask import Flask, request, jsonify
 import subprocess
 import os
 import requests
+import json
 
 app = Flask(__name__)
 impact_received_value = None
@@ -10,7 +11,7 @@ coordinates_log = []
 shock_log=[]
 parse_gps_path = "./parse_gps.py"
 judge_shock_path="./judge_shock.py"
-IN_CSE_URL="http://127.0.0.1:3000"
+IN_CSE_URL="http://127.0.0.1:3000"  #"http://172.16.26.175:3000"
 
 # 임팩트 데이터를 받는 엔드포인트
 @app.route('/post_impact', methods=['POST'])
@@ -24,13 +25,16 @@ def receive_impact_value():
 
         impact_container=f"{IN_CSE_URL}/TinyIoT/cane1/impact"
         headers = {
-            "Content-Type": "application/json",
-            "X-M2M-RVI": "3",
+            "Content-Type": "application/json;ty=4",
+            "X-M2M-RI": "12345",
+            "X-M2M-RVI": "2a",
             "X-M2M-Origin": "CAdmin"
         }
-        payload = {'impact_value': impact_received_value, 'timestamp': timestamp}
+        data=json.dumps([impact_received_value, timestamp])
+        payload = {"m2m:cin":{"con": data}}
+        payload = json.dumps(payload)
             
-        response = requests.post(impact_container, headers=headers, json=payload)
+        response = requests.post(impact_container, headers=headers, data=payload)
         if response.ok:
             print(f"Successfully sent impact data to {IN_CSE_URL}.")
         else:
@@ -52,12 +56,16 @@ def receive_impact_value():
             print("shocked", shock_log)
             SHOCK_container=f"{IN_CSE_URL}/TinyIoT/becane/shock"
             headers = {
-                "Content-Type": "application/json",
-                "X-M2M-RVI": "3",
+                "Content-Type": "application/json;ty=4",
+                "X-M2M-RI": "12345",
+                "X-M2M-RVI": "2a",
                 "X-M2M-Origin": "CAdmin"
             }
-            payload = {'shock_flag': shock_flag, 'timestamp': timestamp}
-            response = requests.post(SHOCK_container, headers=headers, json=payload)
+            data=json.dumps([shock_flag, timestamp])
+            payload = {"m2m:cin":{"con": data}}
+            payload = json.dumps(payload)
+
+            response = requests.post(SHOCK_container, headers=headers, data=payload)
             if response.ok:
                 print(f"Successfully sent shock data to {IN_CSE_URL}.")
             else:
@@ -84,23 +92,47 @@ def receive_power_value():
     data = request.get_json()
     if 'power_level' in data:
         power_received_value = data['power_level']
+        timestamp = data['timestamp']
         status = "on" if power_received_value > 0 else "off"
         print(f"Received power value: {power_received_value}")
         
         battery_container=f"{IN_CSE_URL}/TinyIoT/cane1/battery"
         headers = {
-            "Content-Type": "application/json",
-            "X-M2M-RVI": "3",
+            "Content-Type": "application/json;ty=4",
+            "X-M2M-RI": "12345",
+            "X-M2M-RVI": "2a",
             "X-M2M-Origin": "CAdmin"
         }
-        payload = {'power_level': power_received_value, 'status': status}
+        data=json.dumps([power_received_value, status])
+        payload = {"m2m:cin":{"con": data}}
+        payload = json.dumps(payload)
             
-        response = requests.post(battery_container, headers=headers, json=payload)
+        response = requests.post(battery_container, headers=headers, data=payload)
         if response.ok:
-            print(f"Successfully sent power data to {IN_CSE_URL}.")
+            print(f"Successfully sent battery data to {IN_CSE_URL}.")
         else:
-            print(f"Failed to send power data to {IN_CSE_URL}: {response.status_code}, {response.text}")
-               
+            print(f"Failed to send battery data to {IN_CSE_URL}: {response.status_code}, {response.text}")
+
+        if power_received_value<=10:
+            off_flag=1
+            
+            battery_container=f"{IN_CSE_URL}/TinyIoT/becane/onoff"
+            headers = {
+                "Content-Type": "application/json;ty=4",
+                "X-M2M-RI": "12345",
+                "X-M2M-RVI": "2a",
+                "X-M2M-Origin": "CAdmin"
+            }
+            data=json.dumps([off_flag, timestamp])
+            payload = {"m2m:cin":{"con": data}}
+            payload = json.dumps(payload)
+                
+            response = requests.post(battery_container, headers=headers, data=payload)
+            if response.ok:
+                print(f"Successfully sent onoff data to {IN_CSE_URL}.")
+            else:
+                print(f"Failed to send onoff data to {IN_CSE_URL}: {response.status_code}, {response.text}")
+        else: off_flag=0       
         return jsonify({'status': 'Power value received'}), 200
     else:
         return jsonify({'error': 'No power_level provided'}), 400
@@ -121,16 +153,19 @@ def receive_coordinates():
     if 'latitude' in data and 'longitude' in data:
         latitude = data['latitude']
         longitude = data['longitude']
-
+        
         gps_container=f"{IN_CSE_URL}/TinyIoT/cane1/gps"
         headers = {
-            "Content-Type": "application/json",
-            "X-M2M-RVI": "3",
+            "Content-Type": "application/json;ty=4",
+            "X-M2M-RI": "12345",
+            "X-M2M-RVI": "2a",
             "X-M2M-Origin": "CAdmin"
         }
-        payload = {'latitude': latitude, 'longitude': longitude}
-            
-        response = requests.post(gps_container, headers=headers, json=payload)
+        data=json.dumps([latitude, longitude])
+        payload = {"m2m:cin":{"con": data}}
+        payload = json.dumps(payload)
+
+        response = requests.post(gps_container, headers=headers, data=payload)
         if response.ok:
             print(f"Successfully sent GPS data to {IN_CSE_URL}.")
         else:
@@ -160,18 +195,20 @@ def receive_coordinates():
             parsed_data = result.stdout.strip()  # parse_gps.py의 출력값 가져오기
             latitude, longitude, speed = map(float, parsed_data.strip("()").split(","))
             coordinates_log.append({'latitude': latitude, 'longitude': longitude, 'speed': speed})
-            print(f"Received coordinate: Latitude: {latitude}, Longitude: {longitude}, speed: {parsed_data}")
-            print(coordinates_log)
+            print(f"Received coordinate: Latitude: {latitude}, Longitude: {longitude}, speed: {speed}")
 
             gps_container_be=f"{IN_CSE_URL}/TinyIoT/becane/gps"
             headers = {
-                "Content-Type": "application/json",
-                "X-M2M-RVI": "3",
+                "Content-Type": "application/json;ty=4",
+                "X-M2M-RI": "12345",
+                "X-M2M-RVI": "2a",
                 "X-M2M-Origin": "CAdmin"
             }
-            payload = {'latitude': latitude, 'longitude': longitude}
+            data=json.dumps([latitude, longitude])
+            payload = {"m2m:cin":{"con": data}}
+            payload = json.dumps(payload)
             
-            response = requests.post(gps_container_be, headers=headers, json=payload)
+            response = requests.post(gps_container_be, headers=headers, data=payload)
             if response.ok:
                 print(f"Successfully sent GPS data to {IN_CSE_URL}.")
             else:
@@ -179,13 +216,16 @@ def receive_coordinates():
 
             speed_container=f"{IN_CSE_URL}/TinyIoT/becane/speed"
             headers = {
-                "Content-Type": "application/json",
-                "X-M2M-RVI": "3",
+                "Content-Type": "application/json;ty=4",
+                "X-M2M-RI": "12345",
+                "X-M2M-RVI": "2a",
                 "X-M2M-Origin": "CAdmin"
             }
-            payload = {'speed': speed}
+            data = json.dumps([speed])
+            payload = {"m2m:cin":{"con": data}}
+            payload = json.dumps(payload)
             
-            response = requests.post(speed_container, headers=headers, json=payload)
+            response = requests.post(speed_container, headers=headers, data=payload)
             if response.ok:
                 print(f"Successfully sent speed data to {IN_CSE_URL}.")
             else:

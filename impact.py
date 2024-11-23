@@ -17,4 +17,4 @@ while True:
         print("Failed to send impact value.")
     
     # 10초마다 임팩트 데이터 전송
-    time.sleep(10)
+    time.sleep(5)

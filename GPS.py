@@ -53,4 +53,4 @@ full_path_coords = path_to_city_hall + path_back_to_sejong
 
 # Supply coordinates at regular intervals
 if full_path_coords:
-    supply_coords(full_path_coords, interval=10)
+    supply_coords(full_path_coords, interval=5)
