@@ -11,7 +11,13 @@ coordinates_log = []
 shock_log=[]
 parse_gps_path = "./parse_gps.py"
 judge_shock_path="./judge_shock.py"
-IN_CSE_URL="http://127.0.0.1:3000"  #"http://172.16.26.175:3000"
+IN_CSE_URL= "http://127.0.0.1:3000"  #"http://172.16.26.175:3000"
+
+try:
+    result = subprocess.run(["python", "./initial_registration.py"], check=True, text=True, capture_output=True) 
+except subprocess.CalledProcessError as e:
+    print("실행 중 에러 발생:", e.stderr)
+    print("에러 코드:", e.returncode) 
 
 # 임팩트 데이터를 받는 엔드포인트
 @app.route('/post_impact', methods=['POST'])
@@ -30,7 +36,7 @@ def receive_impact_value():
             "X-M2M-RVI": "2a",
             "X-M2M-Origin": "CAdmin"
         }
-        data=json.dumps([impact_received_value, timestamp])
+        data = str(impact_received_value)
         payload = {"m2m:cin":{"con": data}}
         payload = json.dumps(payload)
             
@@ -47,13 +53,13 @@ def receive_impact_value():
             )
             raw_judge_data = result.stdout.strip()
             judge_data = raw_judge_data.strip("()").split(",")
-            impact_received_value, shock_flag, timestamp = int(judge_data[0]), int(judge_data[1]), judge_data[2]
-            #timestamp=timestamp.lstrip()
+            impact_received_value, shock_flag, timestamp = int(judge_data[0]), (judge_data[1]), judge_data[2]
+            shock_flag=shock_flag.lstrip()
+            shock_flag=shock_flag.strip("'")
             
-            if shock_flag==1:
+            if shock_flag=="is":
                 shock_log.append({'shock_flag': shock_flag, 'timestamp': timestamp})
                 print(f"Received shock at timestamp: {timestamp}")
-            print("shocked", shock_log)
             SHOCK_container=f"{IN_CSE_URL}/TinyIoT/becane/shock"
             headers = {
                 "Content-Type": "application/json;ty=4",
@@ -61,7 +67,7 @@ def receive_impact_value():
                 "X-M2M-RVI": "2a",
                 "X-M2M-Origin": "CAdmin"
             }
-            data=json.dumps([shock_flag, timestamp])
+            data=shock_flag
             payload = {"m2m:cin":{"con": data}}
             payload = json.dumps(payload)
 
@@ -92,8 +98,8 @@ def receive_power_value():
     data = request.get_json()
     if 'power_level' in data:
         power_received_value = data['power_level']
-        timestamp = data['timestamp']
-        status = "on" if power_received_value > 0 else "off"
+        #timestamp = data['timestamp']
+        #status = "on" if power_received_value > 0 else "off"
         print(f"Received power value: {power_received_value}")
         
         battery_container=f"{IN_CSE_URL}/TinyIoT/cane1/battery"
@@ -103,7 +109,7 @@ def receive_power_value():
             "X-M2M-RVI": "2a",
             "X-M2M-Origin": "CAdmin"
         }
-        data=json.dumps([power_received_value, status])
+        data=str(power_received_value)
         payload = {"m2m:cin":{"con": data}}
         payload = json.dumps(payload)
             
@@ -114,7 +120,7 @@ def receive_power_value():
             print(f"Failed to send battery data to {IN_CSE_URL}: {response.status_code}, {response.text}")
 
         if power_received_value<=10:
-            off_flag=1
+            off_flag="off"
             
             battery_container=f"{IN_CSE_URL}/TinyIoT/becane/onoff"
             headers = {
@@ -123,7 +129,7 @@ def receive_power_value():
                 "X-M2M-RVI": "2a",
                 "X-M2M-Origin": "CAdmin"
             }
-            data=json.dumps([off_flag, timestamp])
+            data=off_flag
             payload = {"m2m:cin":{"con": data}}
             payload = json.dumps(payload)
                 
@@ -132,7 +138,7 @@ def receive_power_value():
                 print(f"Successfully sent onoff data to {IN_CSE_URL}.")
             else:
                 print(f"Failed to send onoff data to {IN_CSE_URL}: {response.status_code}, {response.text}")
-        else: off_flag=0       
+        else: off_flag="on"       
         return jsonify({'status': 'Power value received'}), 200
     else:
         return jsonify({'error': 'No power_level provided'}), 400

@@ -3,9 +3,9 @@ import time
 
 def judge_shock(impact, timestamp):
     shock_threshold=70
-    shock_flag=0
+    shock_flag="not"
     if impact>=shock_threshold:
-        shock_flag=1
+        shock_flag="is"
     return (impact, shock_flag, timestamp)
 
 if __name__ == "__main__":
