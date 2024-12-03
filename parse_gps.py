@@ -16,7 +16,7 @@ def haversine(latitude, longitude, pre_latitude, pre_longitude):
     return R*c
 
 def parse_gps(latitude, longitude, pre_latitude, pre_longitude):
-    time_diff=10
+    time_diff=1
     distance = haversine(latitude, longitude, pre_latitude, pre_longitude)
     speed = distance/time_diff *3600 #km/h
     return (latitude, longitude, speed)

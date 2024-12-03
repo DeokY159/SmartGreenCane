@@ -20,13 +20,17 @@ def generate_path(start_coords, end_coords):
         return []
 
 # Function to supply coordinates at regular intervals and send to server
-def supply_coords(coords, interval=1):
-    for coord in coords:
-        print(f"Sending coordinate: Latitude: {coord[0]}, Longitude: {coord[1]}")
+def supply_coords(coords, interval=1, static_duration=20):
+    # 10초 동안 좌표를 순차적으로 보냄
+    for i, coord in enumerate(coords):
+        if i * interval >= static_duration:  # 10초가 지나면
+            print(f"10초 이후, 동일한 좌표 반복: Latitude: {coords[-1][0]}, Longitude: {coords[-1][1]}")
+            response = requests.post('http://localhost:5000/post_coordinates', json={'latitude': coords[-1][0], 'longitude': coords[-1][1]})
+        else:
+            print(f"Sending coordinate: Latitude: {coord[0]}, Longitude: {coord[1]}")
+            response = requests.post('http://localhost:5000/post_coordinates', json={'latitude': coord[0], 'longitude': coord[1]})
         
-        # 서버로 좌표 전송
-        response = requests.post('http://localhost:5000/post_coordinates', json={'latitude': coord[0], 'longitude': coord[1]})
-        
+        # 서버 응답 확인
         if response.ok:
             print("Coordinate sent successfully.")
         else:
@@ -53,4 +57,4 @@ full_path_coords = path_to_city_hall + path_back_to_sejong
 
 # Supply coordinates at regular intervals
 if full_path_coords:
-    supply_coords(full_path_coords, interval=1)
+    supply_coords(full_path_coords, interval=1, static_duration=10)
