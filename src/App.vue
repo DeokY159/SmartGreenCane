@@ -49,7 +49,7 @@
         </div>
         <div id="sound_info">
           <h3>Sound</h3>
-          <img :src="require('@/assets/sound.png')" alt="Sound Icon" class="icon" />
+          <img :src="require('@/assets/sound.png')" alt="Sound Icon" class="icon" @click="showWarningpopup"/>
         </div>
       </div>
     </div>
@@ -57,6 +57,8 @@
     <BatteryPopup v-if="isBatteryPopupVisible" @close="isBatteryPopupVisible = false" />
     <!-- Impact Popup -->
     <Popup v-if="isPopupVisible" :impactValue="22" @close="isPopupVisible = false" />
+    <!-- Warning popup-->
+    <WarningPopup v-if="isWarningVisible" @close="isWarningVisible = false"/>
   </div>
 </template>
 
@@ -65,15 +67,17 @@ import L from 'leaflet'
 import 'leaflet/dist/leaflet.css'
 import navBar from './components/navBar.vue'
 import Popup from './components/Popup.vue'
-import BatteryPopup from "./components/BatteryPopup.vue";
+import BatteryPopup from "./components/BatteryPopup.vue"
 import {fetchData,fetch_aeData} from './components/Importing.js'
+import WarningPopup from './components/WarningPopup.vue'
 
 export default {
   name: 'App',
   components: {
     navBar,
     Popup,
-    BatteryPopup
+    BatteryPopup,
+    WarningPopup,
   },
   data () {
     return {
@@ -82,6 +86,7 @@ export default {
       marker : null,
       isPopupVisible: false, // Popup visibility 상태
       isBatteryPopupVisible: false, // Battery Popup 상태
+      isWarningVisible: false, // Warning popup 상태
       gpsData_N : null,
       gpsData_E : null,
       batteryData : null,
@@ -89,8 +94,12 @@ export default {
       soundData : "off",
       betterypopupShown: false,
       impacntopoupShown: false,
+      impactTimestamps: [],
+      warningCount: 0, // 위험 지역 경고 카운트
+      resetWarningAfter: 2,
     }
   },
+
   methods: {
     updateLocation (lat, lng) {
       this.userLocation = [lat, lng]
@@ -102,7 +111,18 @@ export default {
       this.isPopupVisible = true // Popup을 표시
     },
     showBatteryPopup() {
-      this.isBatteryPopupVisible = true; // Battery Popup 표시
+      this.isBatteryPopupVisible = true // Battery Popup 표시
+    },
+    showWarningpopup() {
+    this.isWarningVisible = true; // 팝업 표시
+    setTimeout(() => {
+      this.isWarningVisible = false; // 3초 후 팝업 닫기
+    }, 3000); // 3000ms = 3초
+    },
+
+    // 팝업 닫기
+    closeDangerZonePopup() {
+      this.isWarningVisible = false;
     },
 
     // tinyIoT에서 gps 센서 데이터 업데이트
@@ -131,9 +151,38 @@ export default {
       const shockconValue = await fetchData(resources);
       console.log('받아온 shock 데이터:', shockconValue); // 받은 데이터 확인
 
-      if(shockconValue === 'is' && !this.impacntopoupShown){
-        this.isPopupVisible = true;
-        this.impacntopoupShown = true;
+      if(shockconValue === 'is'){
+
+        this.showPopup();
+        setTimeout(() => {
+          const now = new Date();
+
+          // 현재 시간 추가
+          this.impactTimestamps.push(now);
+
+          // 10초 이전의 타임스탬프 제거
+          this.impactTimestamps = this.impactTimestamps.filter(
+            (timestamp) => now - timestamp <= 10 * 1000
+          );
+
+            console.log('10초 이내의 임팩트 횟수:', this.impactTimestamps.length);
+
+          // 경고 카운트 증가
+          this.warningCount += 1;
+          console.log(`경고 팝업 횟수: ${this.warningCount}`);
+
+          // 10초 이내에 2번 이상 발생하면 경고 팝업 표시
+          if (this.impactTimestamps.length >= 2 && !this.isWarningVisible) {
+            this.showWarningpopup();
+          } 
+
+          // 경고 카운트가 기준에 도달하면 초기화
+          if (this.warningCount >= this.resetWarningAfter) {
+            console.log("경고 카운트 초기화");
+            this.impactTimestamps = []; // 타임스탬프 초기화
+            this.warningCount = 0; // 경고 카운트 초기화
+          }
+        }, 1000); // 1초 지연
       }
     },
 
@@ -187,7 +236,7 @@ export default {
     // 커스텀 아이콘 생성
     const customIcon = L.icon({
       iconUrl: require('@/assets/custom-marker.png'), // 이미지 경로 (assets 폴더에 저장된 파일)
-      iconSize: [32, 32], // 아이콘 크기
+      iconSize: [40, 40], // 아이콘 크기
       iconAnchor: [16, 32], // 아이콘 앵커 위치
       popupAnchor: [0, -32] // 팝업 위치
     })
