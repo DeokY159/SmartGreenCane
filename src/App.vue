@@ -59,6 +59,9 @@
     <Popup v-if="isPopupVisible" :impactValue="22" @close="isPopupVisible = false" />
     <!-- Warning popup-->
     <WarningPopup v-if="isWarningVisible" @close="isWarningVisible = false"/>
+    <!-- 사고 팝업 -->
+    <AccidentPopup v-if="isAccidentVisible" @close="isAccidentVisible = false" />
+
   </div>
 </template>
 
@@ -70,6 +73,7 @@ import Popup from './components/Popup.vue'
 import BatteryPopup from "./components/BatteryPopup.vue"
 import {fetchData,fetch_aeData} from './components/Importing.js'
 import WarningPopup from './components/WarningPopup.vue'
+import AccidentPopup from './components/AccidentPopup.vue'
 
 export default {
   name: 'App',
@@ -78,6 +82,7 @@ export default {
     Popup,
     BatteryPopup,
     WarningPopup,
+    AccidentPopup,
   },
   data () {
     return {
@@ -87,6 +92,7 @@ export default {
       isPopupVisible: false, // Popup visibility 상태
       isBatteryPopupVisible: false, // Battery Popup 상태
       isWarningVisible: false, // Warning popup 상태
+      isAccidentVisible: false, // Accient popup 상태
       gpsData_N : null,
       gpsData_E : null,
       batteryData : null,
@@ -114,10 +120,14 @@ export default {
       this.isBatteryPopupVisible = true // Battery Popup 표시
     },
     showWarningpopup() {
-    this.isWarningVisible = true; // 팝업 표시
+    this.isWarningVisible = true // 팝업 표시
     setTimeout(() => {
       this.isWarningVisible = false; // 3초 후 팝업 닫기
     }, 3000); // 3000ms = 3초
+    },
+
+    showAccidentpopup(){
+      this.isAccidentVisible = true
     },
 
     // 팝업 닫기
@@ -150,6 +160,10 @@ export default {
       const resources = 'shock'
       const shockconValue = await fetchData(resources);
       console.log('받아온 shock 데이터:', shockconValue); // 받은 데이터 확인
+
+      if(shockconValue === 'ac'){
+        this.showAccidentpopup();
+      }
 
       if(shockconValue === 'is'){
 
