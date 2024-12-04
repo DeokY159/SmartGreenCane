@@ -1,6 +1,6 @@
 import requests
 
-IN_CSE_URL= "http://127.0.0.1:3000"
+IN_CSE_URL= "http://172.16.26.175:3000"
 url = f"{IN_CSE_URL}/TinyIoT"
 
 payload = "{\n    \"m2m:ae\": {\n        \"rn\": \"cane1\",\n        \"api\": \"Nmyapp3\",\n        \"lbl\": [\n            \"key1\",\n            \"key2\"\n        ],\n        \"srv\": [\n            \"3\"\n        ],\n        \"rr\": true\n    }\n}\n\n"

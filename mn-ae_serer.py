@@ -11,7 +11,7 @@ coordinates_log = []
 shock_log=[]
 parse_gps_path = "./parse_gps.py"
 judge_shock_path="./judge_shock.py"
-IN_CSE_URL= "http://127.0.0.1:3000"
+IN_CSE_URL= "http://172.16.26.175:3000"
 
 try:
     result = subprocess.run(["python", "./initial_registration.py"], check=True, text=True, capture_output=True) 

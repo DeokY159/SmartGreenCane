@@ -6,7 +6,7 @@ import subprocess
 impact_process = subprocess.Popen(['python', './aci_impact.py'])
 gps_process = subprocess.Popen(['python', './aci_gps.py'])
 
-power_level = 102
+power_level = 102.5
 timestamp = datetime.now().isoformat()
 
 while power_level > 0:

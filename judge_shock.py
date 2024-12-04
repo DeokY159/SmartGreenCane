@@ -30,10 +30,10 @@ def fetch_shock_log():
 
 def check_ac(gps_log, shock_log):
     if shock_log and shock_log[-1].get('shock')=="is":
-        if len(gps_log)<5:
+        if len(gps_log)<3:
             return False
         else:
-            recent_gps = gps_log[-5:]
+            recent_gps = gps_log[-3:]
             speeds = [entry['speed'] for entry in recent_gps]
             if all(speed < 1 for speed in speeds):
                 return True
