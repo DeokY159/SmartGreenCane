@@ -13,15 +13,19 @@ The Green Cane, provided to individual visually impaired people, is a specially 
 
 ### 1-3. The Positive Impact of Our Solution
 By providing various data about visually impaired individuals to their guardians and public institutions, the possibility of them encountering dangerous situations can be proactively prevented. This enhances the safety system available to the visually impaired and offers greater peace of mind to their guardians. The introduction of the Green Cane creates a foundation for the visually impaired and their guardians to live in a safer and more reliable environment. This system will contribute significantly to improving the quality of life for the visually impaired.
+<br>
 
 # More information
 <p>https://www.hackster.io/green-cane/smart-white-cane-notification-system-d705a9</p>
+<br>
 
 # Demo vdieo
 <P>https://www.youtube.com/watch?v=4WPdhbTY1wQ</p>
+<br>
 
 # Team members
 DeokY159<br>
+NaMsHiMaRo<br>
 lemonsour02<br>
 lx-ejdmsom<br>
 Watermelonlatte<br>
