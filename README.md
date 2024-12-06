@@ -24,11 +24,9 @@ By providing various data about visually impaired individuals to their guardians
 
 # More information
 <p>https://www.hackster.io/green-cane/smart-white-cane-notification-system-d705a9</p>
-<br>
 
 # Demo vdieo
 <P>https://www.youtube.com/watch?v=4WPdhbTY1wQ</p>
-<br>
 
 # Team members
 DeokY159<br>
